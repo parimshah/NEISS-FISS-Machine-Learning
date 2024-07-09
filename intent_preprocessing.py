@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 1993-2015 NEISS-FISS Data
-df = pd.read_stata("C://Users//rohin//Documents//gen//Weil Cornell//NEISS Data//37276-0001-Data.dta")
+df = pd.read_stata("37276-0001-Data.dta")
 
 # Removing BB gun injuries & non-gunshot wound injuries
 bb_columns = ["FA_NGSW", "BB_GSW", "BB_NGSW"]
