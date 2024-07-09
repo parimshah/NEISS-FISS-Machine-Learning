@@ -8,7 +8,7 @@ import numpy as np
 from nltk.tokenize import word_tokenize
 
 # Saving data to DataFrame
-df = pd.read_csv("C://Users//rohin//Documents//gen//Weil Cornell//Code//intentNEISSData.csv")
+df = pd.read_csv("intentNEISSData.csv")
 narratives = df.CMTX1
 intent = df.CLASS_C
 
