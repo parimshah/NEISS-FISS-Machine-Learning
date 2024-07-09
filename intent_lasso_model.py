@@ -39,9 +39,8 @@ y = nonmissing_df.to_numpy()
 # Splitting data into Training: 70%, Validation: 30%
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Training model with 5-fold cross validation
+# Training model 
 reg = linear_model.Lasso(alpha=0.0001)
-kf = KFold(n_splits=5, shuffle=True, random_state=42)
 reg.fit(X_train, y_train)
 
 # Predicting validation set
