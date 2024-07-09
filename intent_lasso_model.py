@@ -4,8 +4,11 @@ from sklearn.metrics import recall_score, accuracy_score, roc_auc_score
 from sklearn.preprocessing import label_binarize
 from sklearn import linear_model
 from sklearn.model_selection import KFold, train_test_split
+from sklearn.inspection import permutation_importance
 import numpy as np
 from nltk.tokenize import word_tokenize
+
+
 
 # Saving data to DataFrame
 df = pd.read_csv("intentNEISSData.csv")
@@ -39,25 +42,20 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # Training model with 5-fold cross validation
 reg = linear_model.Lasso(alpha=0.0001)
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
-for train_index, val_index in kf.split(X_train):
-    X_train_fold, X_val = X_train[train_index], X_train[val_index]
-    y_train_fold, y_val = y_train[train_index], y_train[val_index]
-
-    reg.fit(X_train_fold, y_train_fold)
+reg.fit(X_train, y_train)
 
 # Predicting validation set
-y_preds = np.round(reg.predict(X_val), 0)
-
+y_preds = np.round(reg.predict(X_test), 0)
 
 # Calculating prediction metrics
-accuracy = accuracy_score(y_val, y_preds)
-y_val_binarized = label_binarize(y_val, classes=np.unique(y_val))
-y_preds_binarized = label_binarize(y_preds, classes=np.unique(y_val))
+accuracy = accuracy_score(y_test, y_preds)
+y_val_binarized = label_binarize(y_test, classes=np.unique(y_test))
+y_preds_binarized = label_binarize(y_preds, classes=np.unique(y_test))
 auc = roc_auc_score(y_val_binarized, y_preds_binarized, average='macro')
 
 # Saving true values & predictions in DataFrame
-val_df = pd.DataFrame(data=X_val, columns=features)
-val_df['y_val'] = y_val
+val_df = pd.DataFrame(data=X_test, columns=features)
+val_df['y_val'] = y_test
 val_df['predictions'] = y_preds
 
 # Splitting validation DataFrame by true intent values
@@ -118,10 +116,4 @@ for x in intent_counts:
     print(intent_counts[intent_counts == x].index[0])
     print(x)
     print(np.round(x / total_count, 2))
-
-
-
-
-
-
 
